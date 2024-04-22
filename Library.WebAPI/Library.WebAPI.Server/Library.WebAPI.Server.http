@@ -1,0 +1,46 @@
+@Library.WebAPI.Server_HostAddress = http://localhost:5190
+
+# ###
+
+### Obtener todos los libros
+GET {{Library.WebAPI.Server_HostAddress}}/api/books
+Accept: application/json
+
+###
+
+### Agregar un libro
+POST {{Library.WebAPI.Server_HostAddress}}/api/books
+Content-Type: application/json
+
+{
+    "title": "Nuevo libro",
+    "author": "Autor del nuevo libro"
+}
+
+###
+
+### Eliminar un libro
+DELETE {{Library.WebAPI.Server_HostAddress}}/api/books/11
+Accept: application/json
+
+###
+
+### Prestar un libro
+POST {{Library.WebAPI.Server_HostAddress}}/api/Loan/register
+Content-Type: application/json
+
+{
+    "bookId": 1,
+    "readerId": 1
+}
+
+
+###
+
+### Devolver un libro
+POST {{Library.WebAPI.Server_HostAddress}}/api/loan/return/1
+Accept: application/json
+
+###
+
+
