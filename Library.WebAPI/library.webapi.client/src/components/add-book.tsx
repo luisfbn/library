@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Paper, Container } from '@mui/material';
-import BookService from '../api/book';
+import * as BookService from '../api/book';
 
 interface AddProps {
     isAdded: any;
@@ -18,7 +18,7 @@ const AddBook: React.FC<AddProps> = ({ isAdded, close }) => {
     setIsLoading(true);
     try {
 
-        await BookService.AddBook({ title, author, isAvailable: true });
+        await BookService.Add({ title, author, isAvailable: true });
         setTitle('');
         setAuthor('');
         setIsLoading(false);

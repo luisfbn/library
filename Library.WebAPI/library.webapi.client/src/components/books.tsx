@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Modal, Typography, Tooltip, Backdrop, CircularProgress } from '@mui/material';
-import BookService from '../api/book';
 import { AssignmentReturn, Delete, LibraryAdd, LibraryBooks } from '@mui/icons-material';
 import Swal from 'sweetalert2';
+
 import AddBook from './add-book';
 import Loan from './loan';
-import LoanService from '../api/loan';
+import * as BookService from '../api/book';
+import * as LoanService from '../api/loan';
 
 const Books: React.FC = () => {
 
@@ -24,7 +25,7 @@ const Books: React.FC = () => {
   const fetchBooks = async () => {
     try {
         setIsLoading(true);
-        const data = await BookService.GetAllBooks();
+        const data = await BookService.GetAll();
         setBooks(data);
     } catch (error) {
         console.error('Error fetching books:', error);
@@ -60,7 +61,7 @@ const Books: React.FC = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const result = await BookService.DeleteBook(bookId.toString());
+            const result = await BookService.Delete(bookId.toString());
             fetchBooks();
             if (result) {
                 const updatedBooks = books.filter((book) => book.id !== bookId);
@@ -155,6 +156,7 @@ const Books: React.FC = () => {
                         <Button 
                         variant="outlined" 
                         onClick={() => handleDeleteBook(book.id, book.title)}
+                        data-testid={`delete-button-${book.id}`} 
                         >
                             <Delete />
                         </Button>

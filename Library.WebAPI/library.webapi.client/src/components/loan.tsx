@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Button, Paper, Container, InputLabel, Select, MenuItem } from '@mui/material';
-import LoanService from '../api/loan';
-import ReaderService from '../api/reader';
+import { Button, Paper, Container, InputLabel, Select, MenuItem } from '@mui/material';
+
+import * as LoanService from '../api/loan';
+import * as ReaderService from '../api/reader';
 
 interface LoanProps {
   book: {
