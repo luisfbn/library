@@ -10,7 +10,7 @@ export const Add = async(bookData: any)  => {
       const response = await axios.post(`${BASE_URL}/books`, bookData);
       return response.data;
 
-  } catch (error) {
+  } catch (error: any) {
       console.error(error);
       throw error;
   }
@@ -22,7 +22,7 @@ export const Delete = async (bookId: string) => {
       const response = await axios.delete(`${BASE_URL}/books/${bookId}`);
       return response.data;
 
-  } catch (error) {
+  } catch (error: any) {
       console.error(error);
       throw error;
   }
@@ -34,7 +34,7 @@ export const GetAll = async () => {
         const response = await axios.get(`${BASE_URL}/books`);
         return response;
 
-  } catch (error) {
+  } catch (error: any) {
       console.error(error);
       throw error;
   }

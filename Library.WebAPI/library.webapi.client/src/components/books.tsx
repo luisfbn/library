@@ -21,13 +21,13 @@ const Books: React.FC = () => {
   }, []);
 
   const fetchBooks = async () => {
+    setIsLoading(true);
+
     try {
-        setIsLoading(true);
-        const { data } = await BookService.GetAllBooks();
-        
+        const { data } = await BookService.GetAll();
         setBooks(data);
-    } catch (error) {
-        console.error('Error fetching books:', error);
+    } catch (error: any) {
+        console.error('Error:', error);
     }
     finally {
         setIsLoading(false);
@@ -58,19 +58,21 @@ const Books: React.FC = () => {
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar',
       }).then(async (result) => {
+
         if (result.isConfirmed) {
           try {
             const result = await BookService.Delete(bookId.toString());
-            fetchBooks();
             if (result) {
                 const updatedBooks = books.filter((book) => book.id !== bookId);
                 setBooks(updatedBooks);
+                //fetchBooks();
                 Swal.fire('Eliminado', 'El libro ha sido eliminado correctamente.', 'success');
             }
-          } catch (error) {
+          } catch (error: any) {
             console.error('Error deleting book:', error);
             Swal.fire('Error', 'Ha ocurrido un error al eliminar el libro.', 'error');
           }
+          
         }
       });
       

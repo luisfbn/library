@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor,  } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor,  } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import Books from '../components/books';
@@ -27,10 +27,14 @@ describe('<Books />', () => {
       { id: 1, title: 'Book 1', author: 'Author 1', isAvailable: true },
       { id: 2, title: 'Book 2', author: 'Author 2', isAvailable: false },
     ];
-    (BookService.GetAll as jest.Mock).mockResolvedValue(mockBooks);
+    
+    (BookService.GetAll as jest.Mock).mockResolvedValue({ data: mockBooks });
 
-    render(<Books />);
+    await act(async () => {
+      render(<Books />);
+    });
 
+    
     await waitFor(() => {
       expect(screen.getByText('Book 1')).toBeInTheDocument();
       expect(screen.getByText('Book 2')).toBeInTheDocument();
@@ -38,30 +42,43 @@ describe('<Books />', () => {
   });
 
   it('Eliminar libro', async () => {
-    const mockBooks = [{ id: 1, title: 'Book 1', author: 'Author 1', isAvailable: true }];
-    (BookService.GetAll as jest.Mock).mockResolvedValue(mockBooks);
+    const booktitle = 'Book X';
+    
+    const mockBooks = [
+      { id: 1, title: booktitle, author: 'Author X', isAvailable: true },
+    ];
+    
+    (BookService.GetAll as jest.Mock).mockResolvedValue({ data: mockBooks });
+    (BookService.Delete as jest.Mock).mockResolvedValue(true);
 
-    render(<Books />);
-
-    await waitFor(() => {
-        expect(screen.getByText('Book 1')).toBeInTheDocument();
+    await act(async () => {
+      render(<Books />);
     });
-
-    const deleteButton = screen.getByTestId('delete-button-1');
-    fireEvent.click(deleteButton);
-
-    // click en confirmar
-    const confirmButton = document.querySelector('.swal2-confirm') as HTMLElement;
-    fireEvent.click(confirmButton);
-
+    
     await waitFor(() => {
-        expect(BookService.Delete).toHaveBeenCalledWith('1');
+      expect(screen.getByText(booktitle)).toBeInTheDocument();
     });
 
     await waitFor(() => {
-        expect(screen.getByText('Book 1')).toBeInTheDocument();
+      const deleteButton = screen.getByTestId('delete-button-1');
+      fireEvent.click(deleteButton);
     });
+
+    await waitFor(() => {
+      const confirmButton = document.querySelector('.swal2-confirm');
+      fireEvent.click(confirmButton!);
+    });
+
+    await waitFor(() => {
+      expect(BookService.Delete).toHaveBeenCalledWith('1');
+    });
+    
+    await waitFor(() => {
+      expect(screen.queryByText(booktitle)).not.toBeInTheDocument();
+    });
+
   });
+
 
 });
 
