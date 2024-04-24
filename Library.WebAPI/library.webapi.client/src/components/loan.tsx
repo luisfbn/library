@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Paper, Container, InputLabel, Select, MenuItem } from '@mui/material';
-
 import * as LoanService from '../api/loan';
 import * as ReaderService from '../api/reader';
+import Swal from 'sweetalert2';
 
+// todo: move to ohter file
 interface LoanProps {
   book: {
     id: number;
@@ -29,7 +30,7 @@ const Loan: React.FC<LoanProps> = ({ book, userId = 1, close, isLended }) => {
         const data = await ReaderService.GetAll();
         setReaders(data);
       } catch (error) {
-        console.error('Error fetching readers:', error);
+        console.error('Error:', error);
       }
       finally {
         setIsLoading(false);
@@ -47,9 +48,16 @@ const Loan: React.FC<LoanProps> = ({ book, userId = 1, close, isLended }) => {
       await LoanService.RegisterLoan(book.id, readerId);
       setReaderId(userId);
       isLended();
-    } catch (error) {
-      console.error('Error registering loan:', error);
-      alert('Error al registrar el préstamo');
+
+    } catch (error: any) {
+
+      Swal.fire({
+        titleText: 'Sin Acceso', 
+        text: error.message, 
+        icon: 'warning', 
+        target: document.getElementById('form-modal')
+      });
+
     }
     finally {
       setIsLoading(false);
@@ -58,7 +66,7 @@ const Loan: React.FC<LoanProps> = ({ book, userId = 1, close, isLended }) => {
   };
 
   return (
-    <Container component={Paper} maxWidth="xs" style={{ padding: '20px', marginTop: '50px' }}>
+    <Container id="form-modal" component={Paper} maxWidth="xs" style={{ padding: '20px', marginTop: '50px' }}>
       <h2>Registrar Préstamo</h2>
       <p>Libro: {book.title} - {book.author}</p>
      

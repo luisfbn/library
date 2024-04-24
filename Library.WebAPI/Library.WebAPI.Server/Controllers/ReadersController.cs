@@ -1,4 +1,5 @@
-﻿using Library.Services.Interfaces;
+﻿using Library.Services;
+using Library.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.WebAPI.Server.Controllers
@@ -10,10 +11,16 @@ namespace Library.WebAPI.Server.Controllers
         private readonly IReaderService _readerService = readerService;
 
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult<ServiceResult<bool>> GetAll()
         {
-            var readers = _readerService.GetAll();
-            return Ok(readers);
+            var result = _readerService.GetAll();
+            
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
         }
     }
 }

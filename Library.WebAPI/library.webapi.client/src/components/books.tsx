@@ -1,5 +1,3 @@
-// Books.tsx
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Modal, Typography, Tooltip, Backdrop, CircularProgress } from '@mui/material';
 import { AssignmentReturn, Delete, LibraryAdd, LibraryBooks } from '@mui/icons-material';
@@ -25,7 +23,8 @@ const Books: React.FC = () => {
   const fetchBooks = async () => {
     try {
         setIsLoading(true);
-        const data = await BookService.GetAll();
+        const { data } = await BookService.GetAllBooks();
+        
         setBooks(data);
     } catch (error) {
         console.error('Error fetching books:', error);
@@ -78,7 +77,7 @@ const Books: React.FC = () => {
   };
 
   const handleReturnBook = async (book: any) => {
-    // Mostrar una confirmación con SweetAlert2
+
     Swal.fire({
       title: '¿Estás seguro?',
       text: `Desea regresar el libro ${book.title}.`,
@@ -91,13 +90,20 @@ const Books: React.FC = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+
           await LoanService.ReturnBook(book.id);
           fetchBooks();
           Swal.fire('Devuelto', 'El libro ha sido marcado como devuelto correctamente.', 'success');
-          // Aquí puedes agregar cualquier otra lógica necesaria después de marcar el libro como devuelto
-        } catch (error) {
-          console.error('Error returning book:', error);
-          Swal.fire('Error', 'Ha ocurrido un error al marcar el libro como devuelto.', 'error');
+
+        } catch (error: any) {
+          
+            Swal.fire({
+              titleText: 'Sin Acceso', 
+              text: error.message, 
+              icon: 'warning', 
+              target: document.getElementById('form-modal')
+            });
+
         }
       }
     });

@@ -4,6 +4,6 @@
     {
         ServiceResult<BookDto> AddBook(BookDto bookDto);
         ServiceResult<bool> DeleteBook(int id);
-        IEnumerable<BookDto> GetAllBooks();
+        ServiceResult<IEnumerable<BookDto>>  GetAllBooks();
     }
 }

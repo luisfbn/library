@@ -36,8 +36,13 @@ namespace Library.WebAPI.Server.Controllers
         [HttpGet]
         public IActionResult GetAllBooks()
         {
-            var books = _bookService.GetAllBooks();
-            return Ok(books);
+            var result = _bookService.GetAllBooks();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
         }
 
     }
