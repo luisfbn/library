@@ -43,3 +43,7 @@
     ```bash
     npm run test
     ```
+
+# Inicio de sesión
+
+Cualquier usuario y contraseña que se introduzca será valido y traerá el JWT para usarse como un usuario autenticado. Si no está autenticado no se podrá prestar o devolver libros.
