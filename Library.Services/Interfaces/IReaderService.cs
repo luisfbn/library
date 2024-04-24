@@ -1,10 +1,9 @@
-﻿
-using Library.Services.DTOs;
+﻿using Library.Services.DTOs;
 
 namespace Library.Services.Interfaces
 {
     public interface IReaderService
     {
-        IEnumerable<ReaderDto> GetAll();
+        ServiceResult<IEnumerable<ReaderDto>> GetAll();
     }
 }

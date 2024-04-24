@@ -96,7 +96,7 @@ namespace Library.Services.Test
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(2, result.Count());
+            Assert.Equal(2, result.Data.ToList().Count());
         }
 
 

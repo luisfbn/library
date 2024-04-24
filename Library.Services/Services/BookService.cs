@@ -58,7 +58,7 @@ namespace Library.Services
             };
         }
 
-        public IEnumerable<BookDto> GetAllBooks()
+        public ServiceResult<IEnumerable<BookDto>> GetAllBooks()
         {
             var list = _dbContext
                 .Books
@@ -69,9 +69,15 @@ namespace Library.Services
                     Author = b.Author,
                     IsAvailable = b.IsAvailable
                 })
+                .OrderBy(o => o.Title)
                 .ToList();
 
-            return list;
+            return new ServiceResult<IEnumerable<BookDto>>
+            {
+                Success = true,
+                Data = list,
+                ErrorMessage = ""
+            };
         }
 
     }

@@ -14,7 +14,7 @@ namespace Library.Services.Services
             _dbContext.Database.EnsureCreated();
         }
 
-        public IEnumerable<ReaderDto> GetAll()
+        public ServiceResult<IEnumerable<ReaderDto>> GetAll()
         {
             var list = _dbContext.Readers
                 .Where(x => x.IsActive)
@@ -23,9 +23,15 @@ namespace Library.Services.Services
                     Id = b.Id,
                     Name = b.Name,
                 })
+                .OrderBy(o => o.Name)
                 .ToList();
 
-            return list;
+            return new ServiceResult<IEnumerable<ReaderDto>> { 
+                Success = true, 
+                Data = list, 
+                ErrorMessage = "" 
+            };
         }
+
     }
 }

@@ -1,11 +1,14 @@
 ﻿using Library.Services;
 using Library.Services.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace Library.WebAPI.Server.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
     public class LoanController(ILoanService loanService) : ControllerBase
     {
         private readonly ILoanService _loanService = loanService;
@@ -16,7 +19,7 @@ namespace Library.WebAPI.Server.Controllers
             var result = _loanService.RegisterLoan(loanDto.BookId, loanDto.ReaderId);
             if (result.Success)
             {
-                return Ok(result);
+                return Ok(result.Data);
             }
             return BadRequest(result.ErrorMessage);
         }
@@ -27,10 +30,12 @@ namespace Library.WebAPI.Server.Controllers
             var result = _loanService.ReturnBook(id);
             if (result.Success)
             {
-                return Ok(result);
+                return Ok(result.Data);
             }
             return BadRequest(result.ErrorMessage);
         }
 
     }
+
+
 }

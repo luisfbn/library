@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5190/api';
+// const BASE_URL = 'http://localhost:5190/api';
+const BASE_URL = 'https://localhost:7120/api';
 
 const BookService = {
 
@@ -32,7 +33,7 @@ const BookService = {
     try {
 
         const response = await axios.get(`${BASE_URL}/books`);
-        return response.data;
+        return response;
 
     } catch (error) {
         console.error(error);
